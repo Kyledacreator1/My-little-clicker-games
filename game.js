@@ -3,21 +3,66 @@ const clickButton = document.getElementById('clickButton');
 const resetButton = document.getElementById('resetButton');
 const scoreDisplay = document.getElementById('score');
 
-let score = 0;
+// Create power-up button (bonus points) and high score display
+const powerUpButton = document.createElement('button');
+const highScoreDisplay = document.createElement('div');
+powerUpButton.textContent = "Power-Up!";
+highScoreDisplay.id = 'highScore';
+powerUpButton.style.display = 'none'; // Hide initially
+document.body.appendChild(powerUpButton);
+document.body.appendChild(highScoreDisplay);
 
-// Update the score on the screen
+let score = 0;
+let multiplier = 1;
+let powerUpActive = false;
+let highScore = localStorage.getItem('highScore') || 0;
+
+// Update high score display
+function updateHighScoreDisplay() {
+    highScoreDisplay.textContent = 'High Score: ' + highScore;
+}
+updateHighScoreDisplay();
+
+// Update score display
 function updateScore() {
     scoreDisplay.textContent = 'Score: ' + score;
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore);
+        updateHighScoreDisplay();
+    }
 }
 
-// Event listener for the "Click Me!" button
+// Handle click event on main button
 clickButton.addEventListener('click', () => {
-    score++;
+    score += multiplier;
+    updateScore();
+    if (score >= 10 && !powerUpActive) {
+        showPowerUp();
+    }
+});
+
+// Reset button functionality
+resetButton.addEventListener('click', () => {
+    score = 0;
+    multiplier = 1;
+    powerUpActive = false;
+    powerUpButton.style.display = 'none';
     updateScore();
 });
 
-// Event listener for the "Reset Game" button
-resetButton.addEventListener('click', () => {
-    score = 0;
-    updateScore();
+// Show power-up button
+function showPowerUp() {
+    powerUpActive = true;
+    powerUpButton.style.display = 'block';
+}
+
+// Power-up button functionality
+powerUpButton.addEventListener('click', () => {
+    multiplier = 2; // Double points
+    setTimeout(() => {
+        multiplier = 1; // Reset multiplier after 10 seconds
+        powerUpActive = false;
+        powerUpButton.style.display = 'none';
+    }, 10000);
 });
