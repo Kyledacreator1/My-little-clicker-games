@@ -13,9 +13,9 @@ document.body.appendChild(powerUpButton);
 document.body.appendChild(highScoreDisplay);
 
 let score = 0;
-let multiplier = 1;
-let powerUpActive = false;
-let highScore = localStorage.getItem('highScore') || 0;
+let multiplier = 10;
+let powerUpActive = true;
+let highScore = localStorage.getItem('highScore!') || 0;
 
 // Update high score display
 function updateHighScoreDisplay() {
@@ -62,7 +62,7 @@ powerUpButton.addEventListener('click', () => {
     multiplier = 2; // Double points
     setTimeout(() => {
         multiplier = 1; // Reset multiplier after 10 seconds
-        powerUpActive = false;
+        powerUpActive = true;
         powerUpButton.style.display = 'none';
     }, 10000);
 });
